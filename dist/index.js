@@ -8590,8 +8590,8 @@ async function run() {
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice('===================');
   const response = await client.rest.pulls.get({
     owner: context.payload.repository.owner.login,
-    repo: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.repository.name,
-    pull_number: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.pull_request.number,
+    repo: context.payload.repository.name,
+    pull_number: context.payload.pull_request.number,
     mediaType: {
       format: 'diff'
     }

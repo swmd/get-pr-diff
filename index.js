@@ -13,8 +13,8 @@ async function run() {
   core.notice('===================');
   const response = await client.rest.pulls.get({
     owner: context.payload.repository.owner.login,
-    repo: github.context.payload.repository.name,
-    pull_number: github.context.pull_request.number,
+    repo: context.payload.repository.name,
+    pull_number: context.payload.pull_request.number,
     mediaType: {
       format: 'diff'
     }
