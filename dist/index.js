@@ -8582,7 +8582,7 @@ async function run() {
   const base = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.base.sha;
   const head = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.head.sha;
 
-  const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('token', {required: true}));
+  const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token', {required: true}));
   const response = await client.repos.compareCommits({
     base,
     head,
