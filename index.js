@@ -7,10 +7,13 @@ async function run() {
 
   const token = core.getInput('github-token');
   const client = github.getOctokit(token);
-  core.notice(`github context: ${JSON.stringify(github.context)}`);
+  const context = github.context;
+  core.notice(`====== github context ===========`);
+  core.notice(JSON.stringify(context));
+  core.notice('===================');
   const response = await client.rest.pulls.get({
-    owner: github.context.repo.owner,
-    repo: github.context.repo.repo,
+    owner: context.payload.repository.owner.login,
+    repo: github.context.payload.repository.name,
     pull_number: github.context.pull_request.number,
     mediaType: {
       format: 'diff'
@@ -29,5 +32,5 @@ async function run() {
 
 run().catch(error => {
   console.log(error);
-  setFailed(error.message);
+  core.setFailed(error.message);
 });

@@ -8584,10 +8584,13 @@ async function run() {
 
   const token = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token');
   const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(token);
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`github context: ${JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context)}`);
+  const context = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context;
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`====== github context ===========`);
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(JSON.stringify(context));
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice('===================');
   const response = await client.rest.pulls.get({
-    owner: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.repo.owner,
-    repo: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.repo.repo,
+    owner: context.payload.repository.owner.login,
+    repo: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.repository.name,
     pull_number: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.pull_request.number,
     mediaType: {
       format: 'diff'
@@ -8606,7 +8609,7 @@ async function run() {
 
 run().catch(error => {
   console.log(error);
-  setFailed(error.message);
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed(error.message);
 });
 
 })();
