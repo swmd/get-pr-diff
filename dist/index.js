@@ -8591,6 +8591,9 @@ async function run() {
   });
 
   const files = response.data.files;
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
+    `Result: ${JSON.stringify(files)}`
+  );
   const fileNames = files.map((file) => file.filename);
 
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput(

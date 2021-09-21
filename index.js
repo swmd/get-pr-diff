@@ -14,6 +14,9 @@ async function run() {
   });
 
   const files = response.data.files;
+  core.notice(
+    `Result: ${JSON.stringify(files)}`
+  );
   const fileNames = files.map((file) => file.filename);
 
   core.setOutput(
