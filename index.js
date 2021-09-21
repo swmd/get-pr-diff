@@ -5,24 +5,29 @@ async function run() {
   const base = github.context.payload.pull_request.base.sha;
   const head = github.context.payload.pull_request.head.sha;
 
-  const client = github.getOctokit(core.getInput('github-token', {required: true}));
-  const response = await client.repos.compareCommits({
-    base,
-    head,
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+  const token = core.getInput('github-token');
+  const client = github.getOctokit(token);
+  core.notice(`github context: ${JSON.stringify(github.context)}`);
+  const response = await client.rest.pulls.get({
+    owner: github.context.repo.owner,
+    repo: github.context.repo.repo,
+    pull_number: github.context.pull_request.number,
+    mediaType: {
+      format: 'diff'
+    }
   });
 
-  const files = response.data.files;
   core.notice(
-    `Result: ${JSON.stringify(files)}`
+    `Result: ${JSON.stringify(response)}`
   );
-  const fileNames = files.map((file) => file.filename);
 
   core.setOutput(
     "changed",
-    JSON.stringify(files)
+    JSON.stringify(response)
   );
 }
 
-run ();
+run().catch(error => {
+  console.log(error);
+  setFailed(error.message);
+});

@@ -8582,27 +8582,32 @@ async function run() {
   const base = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.base.sha;
   const head = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.head.sha;
 
-  const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(_actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token', {required: true}));
-  const response = await client.repos.compareCommits({
-    base,
-    head,
-    owner: context.repo.owner,
-    repo: context.repo.repo,
+  const token = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token');
+  const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(token);
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`github context: ${JSON.stringify(_actions_github__WEBPACK_IMPORTED_MODULE_0__.context)}`);
+  const response = await client.rest.pulls.get({
+    owner: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.repo.owner,
+    repo: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.repo.repo,
+    pull_number: _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.pull_request.number,
+    mediaType: {
+      format: 'diff'
+    }
   });
 
-  const files = response.data.files;
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
-    `Result: ${JSON.stringify(files)}`
+    `Result: ${JSON.stringify(response)}`
   );
-  const fileNames = files.map((file) => file.filename);
 
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput(
     "changed",
-    JSON.stringify(files)
+    JSON.stringify(response)
   );
 }
 
-run ();
+run().catch(error => {
+  console.log(error);
+  setFailed(error.message);
+});
 
 })();
 
