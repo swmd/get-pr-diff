@@ -17,14 +17,13 @@ async function run() {
     }
   });
 
-  core.debug(
-    `PR data: ${JSON.stringify(response.data)}`
-  );
+  core.notice(`PR data: ${JSON.stringify(response.data)}`);
   
   if (response.data.deletions > 0) {
     isValid = false;
   }
 
+  core.notice(`Setting output: ${isValid}`);
   core.setOutput("valid", isValid);
 
   if (!isValid) {

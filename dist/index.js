@@ -8594,14 +8594,13 @@ async function run() {
     }
   });
 
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.debug(
-    `PR data: ${JSON.stringify(response.data)}`
-  );
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`PR data: ${JSON.stringify(response.data)}`);
   
   if (response.data.deletions > 0) {
     isValid = false;
   }
 
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`Setting output: ${isValid}`);
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("valid", isValid);
 
   if (!isValid) {
