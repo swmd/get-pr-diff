@@ -8579,7 +8579,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 async function run() {
-  let isValid = true;
+  let output = 'VALID';
 
   const token = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token');
   const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(token);
@@ -8597,13 +8597,13 @@ async function run() {
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`PR data: ${JSON.stringify(response.data)}`);
   
   if (response.data.deletions > 0) {
-    isValid = false;
+    output = 'INVALID';
   }
 
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`Setting output: ${isValid}`);
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("valid", isValid);
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`Setting output: ${output}`);
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("valid", output);
 
-  if (!isValid) {
+  if (output === 'INVALID') {
     _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed("Pull request should not contain any deletions.");
   }
 }

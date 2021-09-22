@@ -2,7 +2,7 @@ import * as github from '@actions/github';
 import * as core from '@actions/core';
 
 async function run() {
-  let isValid = true;
+  let output = 'VALID';
 
   const token = core.getInput('github-token');
   const client = github.getOctokit(token);
@@ -20,13 +20,13 @@ async function run() {
   core.notice(`PR data: ${JSON.stringify(response.data)}`);
   
   if (response.data.deletions > 0) {
-    isValid = false;
+    output = 'INVALID';
   }
 
-  core.notice(`Setting output: ${isValid}`);
-  core.setOutput("valid", isValid);
+  core.notice(`Setting output: ${output}`);
+  core.setOutput("valid", output);
 
-  if (!isValid) {
+  if (output === 'INVALID') {
     core.setFailed("Pull request should not contain any deletions.");
   }
 }
