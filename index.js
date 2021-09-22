@@ -8,10 +8,30 @@ async function run() {
   const token = core.getInput('github-token');
   const client = github.getOctokit(token);
   const context = github.context;
-  core.notice(`====== github context ===========`);
-  core.notice(JSON.stringify(context));
-  core.notice('===================');
+
   const response = await client.rest.pulls.get({
+    owner: context.payload.repository.owner.login,
+    repo: context.payload.repository.name,
+    pull_number: context.payload.pull_request.number,
+    mediaType: {
+      format: 'patch'
+    }
+  });
+
+  core.notice(
+    `Patch result: ${JSON.stringify(response)}`
+  );
+
+  const response1 = await client.rest.pulls.get({
+    owner: context.payload.repository.owner.login,
+    repo: context.payload.repository.name,
+    pull_number: context.payload.pull_request.number,
+    mediaType: {
+      format: 'sha'
+    }
+  });
+
+  const response2 = await client.rest.pulls.get({
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
     pull_number: context.payload.pull_request.number,
@@ -21,7 +41,11 @@ async function run() {
   });
 
   core.notice(
-    `Result: ${JSON.stringify(response)}`
+    `Diff result: ${JSON.stringify(response2)}`
+  );
+
+  core.notice(
+    `SHA result: ${JSON.stringify(response1)}`
   );
 
   core.setOutput(

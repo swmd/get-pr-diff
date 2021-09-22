@@ -8585,10 +8585,30 @@ async function run() {
   const token = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token');
   const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(token);
   const context = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context;
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(`====== github context ===========`);
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(JSON.stringify(context));
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice('===================');
+
   const response = await client.rest.pulls.get({
+    owner: context.payload.repository.owner.login,
+    repo: context.payload.repository.name,
+    pull_number: context.payload.pull_request.number,
+    mediaType: {
+      format: 'patch'
+    }
+  });
+
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
+    `Patch result: ${JSON.stringify(response)}`
+  );
+
+  const response1 = await client.rest.pulls.get({
+    owner: context.payload.repository.owner.login,
+    repo: context.payload.repository.name,
+    pull_number: context.payload.pull_request.number,
+    mediaType: {
+      format: 'sha'
+    }
+  });
+
+  const response2 = await client.rest.pulls.get({
     owner: context.payload.repository.owner.login,
     repo: context.payload.repository.name,
     pull_number: context.payload.pull_request.number,
@@ -8598,7 +8618,11 @@ async function run() {
   });
 
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
-    `Result: ${JSON.stringify(response)}`
+    `Diff result: ${JSON.stringify(response2)}`
+  );
+
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
+    `SHA result: ${JSON.stringify(response1)}`
   );
 
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput(
