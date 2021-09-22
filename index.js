@@ -26,6 +26,10 @@ async function run() {
   }
 
   core.setOutput("valid", isValid);
+
+  if (!isValid) {
+    core.setFailed("Pull request should not contain any deletions.");
+  }
 }
 
 run().catch(error => {

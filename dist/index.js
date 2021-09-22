@@ -8603,6 +8603,10 @@ async function run() {
   }
 
   _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("valid", isValid);
+
+  if (!isValid) {
+    _actions_core__WEBPACK_IMPORTED_MODULE_1__.setFailed("Pull request should not contain any deletions.");
+  }
 }
 
 run().catch(error => {
