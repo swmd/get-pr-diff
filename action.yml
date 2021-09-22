@@ -8,8 +8,8 @@ inputs:
     required: false
 
 outputs:
-  changed: # id of output
-    description: "The changed files"
+  valid: # id of output
+    description: "Indicate if the PR is valid"
 
 runs:
   using: "node12"

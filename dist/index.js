@@ -8579,8 +8579,7 @@ __nccwpck_require__.r(__webpack_exports__);
 
 
 async function run() {
-  const base = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.base.sha;
-  const head = _actions_github__WEBPACK_IMPORTED_MODULE_0__.context.payload.pull_request.head.sha;
+  let isValid = true;
 
   const token = _actions_core__WEBPACK_IMPORTED_MODULE_1__.getInput('github-token');
   const client = _actions_github__WEBPACK_IMPORTED_MODULE_0__.getOctokit(token);
@@ -8591,44 +8590,19 @@ async function run() {
     repo: context.payload.repository.name,
     pull_number: context.payload.pull_request.number,
     mediaType: {
-      format: 'patch'
-    }
-  });
-
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
-    `Patch result: ${JSON.stringify(response)}`
-  );
-
-  const response1 = await client.rest.pulls.get({
-    owner: context.payload.repository.owner.login,
-    repo: context.payload.repository.name,
-    pull_number: context.payload.pull_request.number,
-    mediaType: {
       format: 'sha'
     }
   });
 
-  const response2 = await client.rest.pulls.get({
-    owner: context.payload.repository.owner.login,
-    repo: context.payload.repository.name,
-    pull_number: context.payload.pull_request.number,
-    mediaType: {
-      format: 'diff'
-    }
-  });
-
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
-    `Diff result: ${JSON.stringify(response2)}`
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.debug(
+    `PR data: ${JSON.stringify(response.data)}`
   );
+  
+  if (response.data.deletions > 0) {
+    isValid = false;
+  }
 
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.notice(
-    `SHA result: ${JSON.stringify(response1)}`
-  );
-
-  _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput(
-    "changed",
-    JSON.stringify(response)
-  );
+  _actions_core__WEBPACK_IMPORTED_MODULE_1__.setOutput("valid", isValid);
 }
 
 run().catch(error => {
